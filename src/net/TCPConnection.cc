@@ -1,5 +1,5 @@
-#include "../../include/TCPConnection.h"
-#include "../../include/EventLoop.h"
+#include "../../include/net/TCPConnection.h"
+#include "../../include/net/EventLoop.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <sys/socket.h>

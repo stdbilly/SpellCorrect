@@ -42,6 +42,7 @@ void DictGenerator::genetateEnDict() {
         }
         fs.close();
     }
+    cout << ">> generate dict success" << endl;
 } 
 
 void DictGenerator::storeDict() {
@@ -57,6 +58,7 @@ void DictGenerator::storeDict() {
         ofs << word.first << " " << word.second << endl;   
     }
     ofs.close();
+    cout << ">> store dict success" << endl;
 }
 
 void DictGenerator::getFiles() {
@@ -89,7 +91,7 @@ void DictGenerator::getFiles() {
         }
     }
     //displayS(_cnFiles);
-
+    cout << ">> read file success" << endl;
     closedir(enDir);
     closedir(cnDir);
 }

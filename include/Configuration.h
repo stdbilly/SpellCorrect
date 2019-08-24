@@ -29,6 +29,8 @@ class Configuration {
     unordered_map<string, string> _configMap;
 };
 
+#define CONFIG Configuration::getInstance()->getConfigMap()
+
 template <class Container>
 void display(const Container& c) {
     typename Container::const_iterator cit = c.begin();

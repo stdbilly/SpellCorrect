@@ -3,7 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <string>
-#include "Nocopyble.h"
+#include "../Nocopyble.h"
 using std::cout;
 using std::endl;
 using std::string;

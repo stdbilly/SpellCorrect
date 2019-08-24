@@ -1,8 +1,8 @@
-#include "../../include/Threadpool.h"
+#include "../../include/threadpool/Threadpool.h"
 #include <unistd.h>
 #include <iostream>
 #include <string>
-#include "../../include/Thread.h"
+#include "../../include/threadpool/Thread.h"
 using std::string;
 
 namespace wd {

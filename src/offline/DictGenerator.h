@@ -17,7 +17,7 @@ class DictGenerator {
     private:
     void getFiles();
    private:
-    string _path;//语料库存放路径
+    string _path;//语料库存放目录
     vector<string> _enFiles;//语料库文件存放路径集合
     vector<string> _cnFiles;
     map<string,int> _enDict;

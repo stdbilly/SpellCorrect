@@ -1,4 +1,4 @@
-#include "../../include/SocketIO.h"
+#include "../../include/net/SocketIO.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ int SocketIO::readLine(char* buf, int maxLen) {
                 readn(p, sz);
                 total += sz;
                 p += sz;
-                *p = '\0';
+                *p = '\0';//去掉\n
                 return total;
             }
         }

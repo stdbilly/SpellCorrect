@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 #include "InetAddress.h"
-#include "Nocopyble.h"
+#include "../Nocopyble.h"
 #include "Socket.h"
 #include "SocketIO.h"
 using std::string;

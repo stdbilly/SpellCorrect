@@ -1,4 +1,4 @@
-#include "../../include/threadpool/Thread.h"
+#include "threadpool/Thread.h"
 #include <iostream>
 #include <string>
 using std::string;

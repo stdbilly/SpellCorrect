@@ -1,5 +1,5 @@
 #pragma once
-#include "../Nocopyble.h"
+#include "Nocopyble.h"
 #include <pthread.h>
 
 namespace wd {

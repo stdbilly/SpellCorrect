@@ -1,4 +1,4 @@
-#include "../../include/net/InetAddress.h"
+#include "net/InetAddress.h"
 #include <string.h>
 
 namespace wd {

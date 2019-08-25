@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <string>
-#include "../include/EditDistance.h"
+#include "EditDistance.h"
 using std::cout;
 using std::endl;
 using std::string;

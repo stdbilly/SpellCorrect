@@ -1,6 +1,6 @@
-#include "../../include/Configuration.h"
-#include "../../include/DictGenerator.h"
-#include "../../include/MyDict.h"
+#include "Configuration.h"
+#include "DictGenerator.h"
+#include "MyDict.h"
 using namespace wd;
 
 int main() {

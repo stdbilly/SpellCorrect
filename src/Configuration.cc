@@ -1,4 +1,4 @@
-#include "../include/Configuration.h"
+#include "Configuration.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>

@@ -1,8 +1,8 @@
-#include "../include/MyDict.h"
+#include "MyDict.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "../include/Configuration.h"
+#include "Configuration.h"
 using std::cout;
 using std::endl;
 using std::make_pair;
@@ -44,9 +44,9 @@ void MyDict::loadIndex() {
     readDict();
     cout << ">> load dict success" << endl;
     readIndex(true);
-    cout << "load EN index success" << endl;
+    cout << ">> load EN index success" << endl;
     readIndex(false);
-    cout << "load CN index success" << endl;
+    cout << ">> load CN index success" << endl;
 }
 
 void MyDict::readDict() {

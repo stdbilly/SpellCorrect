@@ -1,5 +1,5 @@
-#include "../../include/threadpool/Condition.h"
-#include "../../include/threadpool/MutexLock.h"
+#include "threadpool/Condition.h"
+#include "threadpool/MutexLock.h"
 #include <stdio.h>
 #include <errno.h>
 

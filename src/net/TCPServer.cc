@@ -1,4 +1,4 @@
-#include "../../include/net/TCPServer.h"
+#include "net/TCPServer.h"
 
 namespace wd {
 TCPServer::TCPServer(const string& ip, unsigned short port) 

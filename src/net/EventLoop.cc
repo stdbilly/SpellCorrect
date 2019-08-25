@@ -1,10 +1,10 @@
-#include "../../include/net/EventLoop.h"
+#include "net/EventLoop.h"
 #include <assert.h>
 #include <sys/eventfd.h>
 #include <unistd.h>
 #include <iostream>
-#include "../../include/net/Acceptor.h"
-#include "../../include/net/TCPConnection.h"
+#include "net/Acceptor.h"
+#include "net/TCPConnection.h"
 using std::cout;
 using std::endl;
 

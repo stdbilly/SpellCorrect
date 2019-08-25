@@ -1,4 +1,4 @@
-#include "../../include/DictGenerator.h"
+#include "DictGenerator.h"
 #include <ctype.h>
 #include <dirent.h>
 #include <errno.h>
@@ -6,8 +6,8 @@
 #include <sys/types.h>
 #include <fstream>
 #include <iostream>
-#include "../../include/Configuration.h"
-#include "../../include/cppjieba/Jieba.hpp"
+#include "Configuration.h"
+#include "cppjieba/Jieba.hpp"
 using std::cout;
 using std::endl;
 

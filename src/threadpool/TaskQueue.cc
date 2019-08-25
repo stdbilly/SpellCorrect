@@ -1,4 +1,4 @@
-#include "../../include/threadpool/TaskQueue.h"
+#include "threadpool/TaskQueue.h"
 
 namespace wd {
 TaskQueue::TaskQueue(size_t queSize)

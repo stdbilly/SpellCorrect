@@ -1,4 +1,4 @@
-#include "../../include/net/Acceptor.h"
+#include "net/Acceptor.h"
 
 namespace wd {
 Acceptor::Acceptor(unsigned short port) : _addr(port), _listensock() {}

@@ -2,10 +2,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
-#include "../include/net/TCPServer.h"
-#include "../include/threadpool/Threadpool.h"
-#include "../include/Configuration.h"
-#include "../include/MyDict.h"
+#include "net/TCPServer.h"
+#include "threadpool/Threadpool.h"
+#include "Configuration.h"
+#include "MyDict.h"
 using std::cout;
 using std::endl;
 using namespace wd;

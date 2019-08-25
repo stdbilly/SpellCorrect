@@ -66,6 +66,7 @@ class EchoServer {
     TCPServer _server;
 };
 
+
 int main() {
     Configuration::getInstance("/home/whb/project/SpellCorrect/conf/my.conf");
     //EchoServer server(4, 10, "192.168.5.171", 2000);

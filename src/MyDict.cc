@@ -25,18 +25,23 @@ void MyDict::destroy() {
 }
 
 void MyDict::start() {
-    readDict(CONFIG["Dict_en"]);
+    readDict();
     cout << ">> read dict success" << endl;
-    for (size_t idx = 0; idx != _dict.size(); ++idx) {
-        generateIndex(idx);
+    for (size_t idx = 0; idx != _enDict.size(); ++idx) {
+        generateEnIndex(idx);
     }
-    cout << ">> generate index success" << endl;
-    storeIndex();
-    cout << ">> store index success" << endl;
+    cout << ">> generate EN index success" << endl;
+
+    for (size_t idx = 0; idx != _cnDict.size(); ++idx) {
+        generateCnIndex(idx);
+    }
+    cout << ">> generate CN index success" << endl;
+    storeEnIndex();
+    storeCnIndex();
 }
 
-void MyDict::readDict(string path) {
-    std::ifstream ifs(path);
+void MyDict::readDict() {
+    std::ifstream ifs(CONFIG["Dict_en"]);
     if (!ifs) {
         perror("fopen");
         return;
@@ -46,31 +51,110 @@ void MyDict::readDict(string path) {
     while (getline(ifs, line)) {
         std::istringstream iss(line);
         iss >> word >> frequency;
-        _dict.push_back(make_pair(word, frequency));
+        _enDict.push_back(make_pair(word, frequency));
+    }
+    ifs.close();
+
+    ifs.open(CONFIG["Dict_cn"]);
+    if (!ifs) {
+        perror("fopen");
+        return;
+    }
+    while (getline(ifs, line)) {
+        std::istringstream iss(line);
+        iss >> word >> frequency;
+        _cnDict.push_back(make_pair(word, frequency));
     }
     ifs.close();
 }
 
-void MyDict::generateIndex(int idx) {
+void MyDict::generateEnIndex(int idx) {
     string key;
-    string word = _dict[idx].first;
+    string word = _enDict[idx].first;
     for (size_t i = 0; i != word.size(); ++i) {
-        char ch = word[i];
         key = word.substr(i, 1);
-        _indexTable[key].insert(idx);
+        _enIndexTable[key].insert(idx);
     }
 }
 
-void MyDict::storeIndex() {
+void MyDict::generateCnIndex(int idx) {
+    string key;
+    string word = _cnDict[idx].first;
+    for (size_t i = 0; i != word.size();) {
+        size_t len = getCnCharLen(word[i]);
+        key = word.substr(i, len);
+        i += len;
+        _cnIndexTable[key].insert(idx);
+    }
+}
+
+size_t MyDict::getCnCharLen(char ch) {
+    if (ch & (1 << 7)) {
+        size_t bytes = 1;
+        for (int idx = 0; idx != 6; ++idx) {
+            if (ch & (1 << (6 - idx))) {
+                ++bytes;
+            } else {
+                break;
+            }
+        }
+        return bytes;
+    }
+    return 1;
+}
+
+void MyDict::storeEnIndex() {
     std::ofstream ofs(CONFIG["Index_en"]);
-    for (auto& elem : _indexTable) {
+    for (auto& elem : _enIndexTable) {
         ofs << elem.first << " ";
         for (auto& idx : elem.second) {
             ofs << idx << " ";
         }
         ofs << endl;
     }
+    cout << ">> store EN index success" << endl;
     ofs.close();
+}
+
+void MyDict::storeCnIndex() {
+    std::ofstream ofs(CONFIG["Index_cn"]);
+    for (auto& elem : _cnIndexTable) {
+        ofs << elem.first << " ";
+        for (auto& idx : elem.second) {
+            ofs << idx << " ";
+        }
+        ofs << endl;
+    }
+    cout << ">> store CN index success" << endl;
+    ofs.close();
+}
+
+void MyDict::readIndex(bool isEn) {
+    std::ifstream ifs;
+    if (isEn) {
+        ifs.open(CONFIG["index_en"]);
+    } else {
+        ifs.open(CONFIG["index_cn"]);
+    }
+    if (!ifs) {
+        perror("fopen");
+        return;
+    }
+    string line;
+    while (getline(ifs, line)) {
+        std::istringstream iss(line);
+        string key;
+        int idx;
+        iss >> key;
+        while (iss >> idx) {
+            if (isEn) {
+                _enIndexTable[key].insert(idx);
+            } else {
+                _cnIndexTable[key].insert(idx);
+            }
+        }
+    }
+    ifs.close();
 }
 
 MyDict::MyDict() { cout << "MyDict()" << endl; }

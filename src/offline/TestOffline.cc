@@ -8,6 +8,7 @@ int main() {
     //display(Configuration::getInstance()->getConfigMap());
     DictGenerator dictGen;
     dictGen.genetateENdict();
+    dictGen.genetateCNdict();
     dictGen.storeDict();
     MyDict::getInstance()->start();
     return 0;

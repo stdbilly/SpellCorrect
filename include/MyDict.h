@@ -17,21 +17,29 @@ class MyDict {
     static void init();
     static void destroy();
     void start();
-    vector<pair<string, int>>& getDict() { return _dict; }
-    unordered_map<string, set<int>>& getIndexTable() { return _indexTable; }
-    void storeIndex();
+    vector<pair<string, int>>& getEnDict() { return _enDict; }
+    vector<pair<string, int>>& getCnDict() { return _cnDict; }
+    unordered_map<string, set<int>>& getEnIndexTable() { return _enIndexTable; }
+    unordered_map<string, set<int>>& getCnIndexTable() { return _cnIndexTable; }
+    void readIndex(bool isEN);
 
    private:
     MyDict();
     ~MyDict();
-    void readDict(string path);
-    void generateIndex(int idx);
-
+    void readDict();
+    size_t getCnCharLen(char ch);
+    void generateEnIndex(int idx);
+    void generateCnIndex(int idx);
+    void storeEnIndex();
+    void storeCnIndex();
+    
    private:
     static MyDict* _pInstance;
     static pthread_once_t _once;
-    vector<pair<string, int>> _dict;
-    unordered_map<string, set<int>> _indexTable;
+    vector<pair<string, int>> _enDict;
+    vector<pair<string, int>> _cnDict;
+    unordered_map<string, set<int>> _enIndexTable;
+    unordered_map<string, set<int>> _cnIndexTable;
 };
 
 }  // namespace wd

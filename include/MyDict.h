@@ -16,12 +16,12 @@ class MyDict {
     static MyDict* getInstance();
     static void init();
     static void destroy();
-    void start();
+    void buildIndex();
+    void loadIndex();
     vector<pair<string, int>>& getEnDict() { return _enDict; }
     vector<pair<string, int>>& getCnDict() { return _cnDict; }
     unordered_map<string, set<int>>& getEnIndexTable() { return _enIndexTable; }
     unordered_map<string, set<int>>& getCnIndexTable() { return _cnIndexTable; }
-    void readIndex(bool isEN);
 
    private:
     MyDict();
@@ -32,7 +32,8 @@ class MyDict {
     void generateCnIndex(int idx);
     void storeEnIndex();
     void storeCnIndex();
-    
+    void readIndex(bool isEN);
+
    private:
     static MyDict* _pInstance;
     static pthread_once_t _once;

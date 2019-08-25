@@ -24,7 +24,7 @@ void MyDict::destroy() {
     if (_pInstance) delete _pInstance;
 }
 
-void MyDict::start() {
+void MyDict::buildIndex() {
     readDict();
     cout << ">> read dict success" << endl;
     for (size_t idx = 0; idx != _enDict.size(); ++idx) {
@@ -38,6 +38,15 @@ void MyDict::start() {
     cout << ">> generate CN index success" << endl;
     storeEnIndex();
     storeCnIndex();
+}
+
+void MyDict::loadIndex() {
+    readDict();
+    cout << ">> load dict success" << endl;
+    readIndex(true);
+    cout << "load EN index success" << endl;
+    readIndex(false);
+    cout << "load CN index success" << endl;
 }
 
 void MyDict::readDict() {
@@ -132,9 +141,9 @@ void MyDict::storeCnIndex() {
 void MyDict::readIndex(bool isEn) {
     std::ifstream ifs;
     if (isEn) {
-        ifs.open(CONFIG["index_en"]);
+        ifs.open(CONFIG["Index_en"]);
     } else {
-        ifs.open(CONFIG["index_cn"]);
+        ifs.open(CONFIG["Index_cn"]);
     }
     if (!ifs) {
         perror("fopen");

@@ -10,6 +10,6 @@ int main() {
     dictGen.genetateENdict();
     dictGen.genetateCNdict();
     dictGen.storeDict();
-    MyDict::getInstance()->start();
+    MyDict::getInstance()->buildIndex();
     return 0;
 }

@@ -1,4 +1,4 @@
-INC_DIR:= include/ /include/net/ /include/threadpool/ include/cppjieba
+INC_DIR:= include/ include/net/ include/threadpool/ include/cppjieba
 SRC_DIR:= src/net src/
 SRCS:=$(wildcard src/*.cc) $(wildcard src/net/*.cc) $(wildcard src/threadpool/*.cc) 
 OBJS:= $(patsubst %.cc, %.o, $(SRCS))

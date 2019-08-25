@@ -21,6 +21,7 @@ class Configuration {
 
    private:
     Configuration(const string& filepath);
+    ~Configuration() { cout << "~Configuration()" << endl; }
     void readFile(const string& filename);
 
    private:

@@ -1,18 +1,18 @@
-INC_DIR:= ./
-SRC_DIR:= ./
-SRCS:=$(wildcard *.cc)
-OBJS:= $(patsubst %.cc, %.o, $(SRCS))
+INC_DIR1:= ./ ../../include/
+SRC_DIR1:= ./
+SRCS1:=$(wildcard *.cc) $(wildcard ../Configuration.cc) $(wildcard ../MyDict.cc)  
+OBJS1:= $(patsubst %.cc, %.o, $(SRCS1))
 LIBS:= -lpthread
 
 CXX:=g++
 
-CXXFLAGS:= -w -g  $(addprefix -I, $(INC_DIR)) $(LIBS) 
+CXXFLAGS1:= -w -g  $(addprefix -I, $(INC_DIR1)) $(LIBS) 
 
-EXE:=../../bin/offline.exe
+EXE1:=../../bin/offline.exe
 
-$(EXE):$(OBJS)
-	$(CXX) -o $(EXE) $(OBJS) $(CXXFLAGS)
+$(EXE1):$(OBJS1)
+	$(CXX) -o $(EXE1) $(OBJS1) $(CXXFLAGS1)
 
 clean:
-	rm -rf $(EXE)
-	rm -rf $(OBJS)
+	rm -rf $(EXE1)
+	rm -rf $(OBJS1)

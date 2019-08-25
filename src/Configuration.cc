@@ -1,4 +1,4 @@
-#include "Configuration.h"
+#include "../include/Configuration.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -30,12 +30,13 @@ void Configuration::destroy() {
 
 Configuration::Configuration(const string& filepath) : _filepath(filepath) {
     readFile(filepath);
+    cout << "Configuration(const string&)" << endl;
 }
 
 void Configuration::readFile(const string& filename) {
     ifstream ifs(filename);
     if (!ifs) {
-        cout << "open config file error" << endl;
+        perror("fopen");
         return;
     }
     string line, key, value;
@@ -44,6 +45,7 @@ void Configuration::readFile(const string& filename) {
         iss >> key >> value;
         _configMap.insert(make_pair(key, value));
     }
+    cout << ">> read config file success" << endl;
 }
 
 Configuration* Configuration::_pInstance = nullptr;

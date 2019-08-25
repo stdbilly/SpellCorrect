@@ -1,34 +1,38 @@
-#include "DictGenerator.h"
+#include "../../include/DictGenerator.h"
 #include <ctype.h>
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <iostream>
 #include <fstream>
-#include "Configuration.h"
+#include <iostream>
+#include "../../include/Configuration.h"
+using std::cout;
+using std::endl;
 
 namespace wd {
 DictGenerator::DictGenerator() {
-    getFiles();
+    cout << "DictGenerator()" << endl;
+    importFiles();
 }
 
-void DictGenerator::genetateEnDict() {
-    for(auto& path : _enFiles) {
+DictGenerator::~DictGenerator() { cout << "~DictGenerator()" << endl; }
+
+void DictGenerator::genetateENdict() {
+    for (auto& path : _enFiles) {
         std::fstream fs(path);
-        if(!fs) {
+        if (!fs) {
             perror("fopen");
             return;
         }
 
         char ch;
-        while (fs >> ch)
-        {
-            if(isupper(ch)) {
+        while (fs >> ch) {
+            if (isupper(ch)) {
                 ch = tolower(ch);
                 fs.seekg(-1, std::ios_base::cur);
                 fs << ch;
-            } else if(ispunct(ch) || isdigit(ch)) {
+            } else if (ispunct(ch) || isdigit(ch)) {
                 fs.seekg(-1, std::ios_base::cur);
                 fs << ' ';
             }
@@ -36,34 +40,33 @@ void DictGenerator::genetateEnDict() {
         fs.clear();
         fs.seekg(0, std::ios_base::beg);
         string word;
-        while (fs >> word)
-        {
-            ++_enDict[word]; 
+        while (fs >> word) {
+            ++_enDict[word];
         }
         fs.close();
     }
-    cout << ">> generate dict success" << endl;
-} 
+    cout << ">> generate EN Dict success, " << _enDict.size() << " words"
+         << endl;
+}
 
 void DictGenerator::storeDict() {
-    string enPath = Configuration::getInstance()->getConfigMap()["Dict_en"];
+    string enPath = CONFIG["Dict_en"];
     std::ofstream ofs(enPath);
-    if(!ofs) {
+    if (!ofs) {
         perror("fopen");
         return;
     }
 
-    for (auto& word : _enDict)
-    {
-        ofs << word.first << " " << word.second << endl;   
+    for (auto& word : _enDict) {
+        ofs << word.first << " " << word.second << endl;
     }
     ofs.close();
     cout << ">> store dict success" << endl;
 }
 
-void DictGenerator::getFiles() {
-    string enPath = Configuration::getInstance()->getConfigMap()["enLibDir"];
-    string cnPath = Configuration::getInstance()->getConfigMap()["cnLibDir"];
+void DictGenerator::importFiles() {
+    string enPath = CONFIG["enLibDir"];
+    string cnPath = CONFIG["cnLibDir"];
     DIR *enDir, *cnDir;
     struct dirent* pDirInfo;
     enDir = ::opendir(enPath.c_str());
@@ -83,15 +86,16 @@ void DictGenerator::getFiles() {
             _enFiles.push_back(enPath + string(pDirInfo->d_name));
         }
     }
-    //displayS(_enFiles);
+    cout << ">> import enlish lib success" << endl;
+    displayS(_enFiles);
 
     while ((pDirInfo = ::readdir(cnDir)) != nullptr) {
         if (*(pDirInfo->d_name) != '.') {
             _cnFiles.push_back(cnPath + string(pDirInfo->d_name));
         }
     }
-    //displayS(_cnFiles);
-    cout << ">> read file success" << endl;
+    cout << ">> import Chinese lib success" << endl;
+    displayS(_cnFiles);
     closedir(enDir);
     closedir(cnDir);
 }

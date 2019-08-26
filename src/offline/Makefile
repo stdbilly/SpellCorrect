@@ -1,4 +1,4 @@
-INC_DIR1:= ./ ../../include/ ../../include/cppjieba/ ../../include/limonp
+INC_DIR1:= ../../include/ ../../include/cppjieba/ ../../include/limonp
 SRC_DIR1:= ./
 SRCS1:=$(wildcard *.cc) $(wildcard ../Configuration.cc) $(wildcard ../MyDict.cc)  
 OBJS1:= $(patsubst %.cc, %.o, $(SRCS1))

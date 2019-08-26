@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
+using std::string;
 
-size_t nBytesCode(const char ch);
+namespace wd {
 
-std::size_t length(const std::string &str);
-
+size_t getBytes(const char ch);
+size_t length(const string &str);
 int tripleMin(const int &a, const int &b, const int &c);
-
-int editDistance(const std::string &lhs, const std::string &rhs);
+int editDistance(const string &lhs, const string &rhs);
+}  // namespace wd

@@ -1,13 +1,11 @@
-#include <string.h>
-#include <stdio.h>
-#include <string>
 #include "EditDistance.h"
-using std::cout;
-using std::endl;
-using std::string;
+#include <stdio.h>
+#include <string.h>
+
+namespace wd {
 
 /// 获取一个字节高位开头为1的个数
-size_t nBytesCode(const char ch) {
+size_t getBytes(const char ch) {
     if (ch & (1 << 7)) {
         int nBytes = 1;
         for (int idx = 0; idx != 6; ++idx) {
@@ -21,10 +19,10 @@ size_t nBytesCode(const char ch) {
     return 1;
 }
 
-std::size_t length(const std::string &str) {
-    std::size_t ilen = 0;
-    for (std::size_t idx = 0; idx != str.size(); ++idx) {
-        int nBytes = nBytesCode(str[idx]);
+size_t length(const string &str) {
+    size_t ilen = 0;
+    for (size_t idx = 0; idx != str.size(); ++idx) {
+        int nBytes = getBytes(str[idx]);
         idx += (nBytes - 1);
         ++ilen;
     }
@@ -35,8 +33,8 @@ int triple_min(const int &a, const int &b, const int &c) {
     return a < b ? (a < c ? a : c) : (b < c ? b : c);
 }
 
-int editDistance(const std::string &lhs,
-                 const std::string &rhs) {  //计算最小编辑距离-包括处理中英文
+int editDistance(const string &lhs,
+                 const string &rhs) {  //计算最小编辑距离-包括处理中英文
     size_t lhs_len = length(lhs);
     size_t rhs_len = length(rhs);
     int editDist[lhs_len + 1][rhs_len + 1];
@@ -48,16 +46,16 @@ int editDistance(const std::string &lhs,
         editDist[0][idx] = idx;
     }
 
-    std::string sublhs, subrhs;
-    for (std::size_t dist_i = 1, lhs_idx = 0; dist_i <= lhs_len;
+    string sublhs, subrhs;
+    for (size_t dist_i = 1, lhs_idx = 0; dist_i <= lhs_len;
          ++dist_i, ++lhs_idx) {
-        size_t nBytes = nBytesCode(lhs[lhs_idx]);
+        size_t nBytes = getBytes(lhs[lhs_idx]);
         sublhs = lhs.substr(lhs_idx, nBytes);
         lhs_idx += (nBytes - 1);
 
-        for (std::size_t dist_j = 1, rhs_idx = 0; dist_j <= rhs_len;
+        for (size_t dist_j = 1, rhs_idx = 0; dist_j <= rhs_len;
              ++dist_j, ++rhs_idx) {
-            nBytes = nBytesCode(rhs[rhs_idx]);
+            nBytes = getBytes(rhs[rhs_idx]);
             subrhs = rhs.substr(rhs_idx, nBytes);
             rhs_idx += (nBytes - 1);
             if (sublhs == subrhs) {
@@ -72,3 +70,4 @@ int editDistance(const std::string &lhs,
     }
     return editDist[lhs_len][rhs_len];
 }
+}  // namespace wd

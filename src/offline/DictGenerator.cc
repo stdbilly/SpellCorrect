@@ -1,4 +1,4 @@
-#include "DictGenerator.h"
+#include "../../include/DictGenerator.h"
 #include <ctype.h>
 #include <dirent.h>
 #include <errno.h>
@@ -6,8 +6,8 @@
 #include <sys/types.h>
 #include <fstream>
 #include <iostream>
-#include "Configuration.h"
-#include "cppjieba/Jieba.hpp"
+#include "../../include/Configuration.h"
+#include "../../include/cppjieba/Jieba.hpp"
 using std::cout;
 using std::endl;
 
@@ -18,6 +18,13 @@ DictGenerator::DictGenerator() {
 }
 
 DictGenerator::~DictGenerator() { cout << "~DictGenerator()" << endl; }
+
+void DictGenerator::start() {
+    genetateENdict();
+    genetateCNdict();
+    cout << ">> generate dict success, "  << endl;
+    storeDict();
+} 
 
 void DictGenerator::genetateENdict() {
     for (auto& path : _enFiles) {
@@ -42,12 +49,10 @@ void DictGenerator::genetateENdict() {
         fs.seekg(0, std::ios_base::beg);
         string word;
         while (fs >> word) {
-            ++_enDict[word];
+            ++_dict[word];
         }
         fs.close();
     }
-    cout << ">> generate EN Dict success, " << _enDict.size() << " words"
-         << endl;
 }
 
 void DictGenerator::genetateCNdict() {
@@ -77,31 +82,22 @@ void DictGenerator::genetateCNdict() {
             vector<string> words;
             jieba.Cut(s, words, true);
             for (auto& word : words) {
-                ++_cnDict[word];
+                ++_dict[word];
             }
         }
         fs.close();
     }
-    cout << ">> generate CN Dict success, " << _cnDict.size() << " words"
-         << endl;
 }
 
 void DictGenerator::storeDict() {
-    std::ofstream ofs(CONFIG["Dict_en"]);
+    std::ofstream ofs(CONFIG["Dict"]);
 
-    for (auto& word : _enDict) {
+    for (auto& word : _dict) {
         ofs << word.first << " " << word.second << endl;
     }
-    ofs.close();
-    cout << ">> store EN dict success" << endl;
 
-    ofs.open(CONFIG["Dict_cn"]);
-
-    for (auto& word : _cnDict) {
-        ofs << word.first << " " << word.second << endl;
-    }
     ofs.close();
-    cout << ">> store CN dict success" << endl;
+    cout << ">> store dict success" << endl;
 }
 
 void DictGenerator::importFiles() {

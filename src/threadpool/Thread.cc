@@ -5,36 +5,21 @@ using std::string;
 
 namespace wd {
 namespace current_thread {
-__thread const char* threadName = "wd thread";
+__thread int threadID;
 }
 
-struct ThreadData {
-    ThreadData(const string& name, ThreadCallback&& cb)
-        : _name(name), _cb(cb) {}
-
-    void runInThread() {
-        current_thread::threadName =
-            (_name == string() ? "wd thread" : _name.c_str());
-        if (_cb) {
-            _cb();
-        }
-    }
-    string _name;
-    ThreadCallback _cb;
-};
-
 void Thread::start() {
-    ThreadData* pdata = new ThreadData(_name, std::move(_cb));
-    pthread_create(&_pthid, nullptr, threadFunc, pdata);
+    pthread_create(&_pthid, nullptr, threadFunc, this);
     _isRunning = true;
 }
 
 void* Thread::threadFunc(void* arg) {
-    ThreadData* pdata = static_cast<ThreadData*>(arg);
-    if (pdata) {
-        pdata->runInThread();  //执行任务
+    Thread* pThread = static_cast<Thread*>(arg);
+    current_thread::threadID = pThread->_id; 
+    if (pThread) {
+        pThread->_cb();  //执行任务
     }
-    delete pdata;
+    
     return nullptr;
 }
 

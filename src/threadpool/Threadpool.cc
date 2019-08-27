@@ -29,7 +29,7 @@ void Threadpool::start() {
     for (size_t idx = 0; idx != _threadNum; ++idx) {
         string threadname = "workthread " + std::to_string(idx);
         unique_ptr<Thread> thread(
-            new Thread(std::bind(&Threadpool::threadFunc, this), threadname));
+            new Thread(std::bind(&Threadpool::threadFunc, this), idx));
         _threads.push_back(std::move(thread));
     }
 

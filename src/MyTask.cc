@@ -6,9 +6,13 @@
 using std::unordered_map;
 
 namespace wd {
+namespace current_thread {
+extern __thread int threadID;
+}
+
 //运行在线程池的某一个子线程中
 void MyTask::process() {
-    cout << ">> " << current_thread::threadName << ": MyTask::process()"
+    cout << ">> workthread " << current_thread::threadID << ": MyTask::process()"
          << endl;
     queryIndexTable();
     string result;

@@ -9,27 +9,27 @@ using std::endl;
 using std::string;
 
 namespace wd {
-namespace current_thread {
-extern __thread const char* threadName;
-}
+// namespace current_thread {
+// extern __thread int threadID;
+// }
 
 using ThreadCallback = std::function<void()>;
 
 class Thread : Nocopyble {
    public:
-    Thread(ThreadCallback&& cb, const string& name = string())
-        : _pthid(0), _isRunning(false), _cb(std::move(cb)), _name(name) {}
+    Thread(ThreadCallback&& cb, const int id)
+        : _pthid(0), _isRunning(false), _cb(std::move(cb)), _id(id) {}
 
     ~Thread();
     void start();
     void join();
-    string name() const { return _name; }
+    int threadID() const { return _id; }
     static void* threadFunc(void*);
 
    private:
     pthread_t _pthid;
     bool _isRunning;
     ThreadCallback _cb;
-    string _name;
+    int _id;
 };
 }  // namespace wd

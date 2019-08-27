@@ -1,23 +1,32 @@
-#include "Cache.h"
-#include <vector>
+#pragma once
+#include <pthread.h>
 #include <memory>
-using std::vector;
+#include <vector>
+#include "Cache.h"
 using std::shared_ptr;
+using std::vector;
 
 namespace wd {
 class CacheManager {
    public:
-    CacheManager(/* args */);
-    ~CacheManager();
+    static CacheManager* getInstance();
+    static void destroy();
+    static void init();
+
+    void initCache();
+    Cache& getCache(size_t idx);
+    void periodicUpdateCaches();
 
    private:
-    int cacheNum;//
-    vector<Cache> _subCache;
-    shared_ptr<Cache> _pCache;//原缓存
+    CacheManager();
+    ~CacheManager() {}
+
+   private:
+    static pthread_once_t _once;
+    static CacheManager* _pInstance;
+    int _cacheNum;  //
+    string _filepath;
+    vector<Cache> _subCache;  //缓存数量和线程数量一致
 };
-
-CacheManager::CacheManager(/* args */) {}
-
-CacheManager::~CacheManager() {}
 
 }  // namespace wd

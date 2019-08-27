@@ -34,6 +34,8 @@ void readJasonStr(const char* str) {
           string word = root[key].asString();
           cout << key << " : " << word << endl;
       }
+  } else {
+      cout << "no answer!" << endl;
   }
 }
 

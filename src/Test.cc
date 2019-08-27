@@ -2,20 +2,26 @@
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
+#include "CacheManager.h"
 #include "Configuration.h"
 #include "MyDict.h"
 #include "SpellCorrectServer.h"
 using std::cout;
 using std::endl;
+using std::stoi;
 using namespace wd;
-
 
 int main() {
     Configuration::getInstance("/home/whb/project/SpellCorrect/conf/my.conf");
-    //EchoServer server(4, 10, "192.168.5.171", 2000);
     MyDict::getInstance()->loadIndex();
+    CacheManager::getInstance()->initCache();
 
-    SpellCorrectServer server(std::stoi(CONFIG["threadNum"]), std::stoi(CONFIG["queSize"]), CONFIG["ip"],  std::stoi(CONFIG["port"]));
+    SpellCorrectServer server(stoi(CONFIG["threadNum"]),
+                              stoi(CONFIG["queSize"]), CONFIG["ip"],
+                              stoi(CONFIG["port"]), stoi(CONFIG["initTime"]),
+                              stoi(CONFIG["periodicTime"]),
+                              std::bind(&CacheManager::periodicUpdateCaches,
+                                        CacheManager::getInstance()));
     server.start();
     return 0;
 }

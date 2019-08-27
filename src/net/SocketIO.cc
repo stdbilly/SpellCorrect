@@ -44,7 +44,7 @@ int SocketIO::readLine(char* buf, int maxLen) {
                 readn(p, sz);
                 total += sz;
                 p += sz;
-                *p = '\0';//去掉\n
+                *p = '\0';
                 return total;
             }
         }

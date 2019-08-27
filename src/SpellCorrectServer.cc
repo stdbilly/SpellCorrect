@@ -4,11 +4,14 @@ using std::placeholders::_1;
 namespace wd
 {
     SpellCorrectServer::SpellCorrectServer(int threadNum, int queSize, const string& ip,
-               unsigned short port)
-        : _threadpool(threadNum, queSize), _server(ip, port) {}
+               unsigned short port,int initialTime, int periodicTime, TimerCallback&& cb)
+        : _threadpool(threadNum, queSize), 
+          _server(ip, port),
+          _timerThread(initialTime, periodicTime, std::move(cb)) {}
 
     void SpellCorrectServer::start() {
         _threadpool.start();
+        _timerThread.start();
         _server.setConnectionCallback(
             std::bind(&SpellCorrectServer::onConnection, this, _1));
         _server.setMessageCallback(

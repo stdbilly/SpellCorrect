@@ -1,6 +1,6 @@
 #include "Cache.h"
 #include <fstream>
-#include "Configuration.h"
+using std::endl;
 using std::ifstream;
 using std::make_pair;
 using std::ofstream;
@@ -8,10 +8,11 @@ using std::ofstream;
 namespace wd {
 Cache::Cache(size_t capacity) : _capacity(capacity) {}
 
-Cache::Cache(const Cache& rhs)
-    : _capacity(rhs._capacity),
-      _cacheList(rhs._cacheList),
-      _hashCache(rhs._hashCache) {}
+Cache::Cache(const Cache& rhs) : _capacity(rhs._capacity) {
+    for (auto it = rhs._cacheList.rbegin(); it != rhs._cacheList.rend(); ++it) {
+        put(it->first, it->second);
+    }
+}
 
 string Cache::get(const string& key) {
     if (_hashCache.find(key) == _hashCache.end()) {
@@ -23,7 +24,7 @@ string Cache::get(const string& key) {
     }
 }
 
-void Cache::addElement(const string& key, const string& value) {
+void Cache::put(const string& key, const string& value) {
     if (_hashCache.find(key) != _hashCache.end()) {
         _cacheList.splice(_cacheList.begin(), _cacheList, _hashCache[key]);
         _cacheList.begin()->second = value;
@@ -39,21 +40,39 @@ void Cache::addElement(const string& key, const string& value) {
     }
 }
 
-void Cache::writeToFile() {
-    ofstream ofs(CONFIG["Cache"]);
-    if(!ofs) {
+void Cache::updateCache(const Cache& rhs) {
+    for (auto& elem : rhs._queryList) {
+        put(elem.first, elem.second);
+    }
+}
+
+void Cache::update(Cache& rhs) {
+    for (auto& elem : rhs._queryList) {
+        _queryList.push_back(make_pair(elem.first, elem.second));
+    }
+}
+
+void Cache::update(const string& queryWord, const string& result) {
+    _queryList.push_back(make_pair(queryWord, result));
+}
+
+void Cache::writeToFile(const string& filepath) {
+    ofstream ofs(filepath);
+    if (!ofs) {
         perror("fopen");
         return;
     }
-    for (auto& elem : _cacheList)
-    {
-        ofs << elem.first << '\t' << elem.second << endl;    
+    for (auto& elem : _cacheList) {
+        if (elem.second.back() == '\n') {
+            elem.second.erase(elem.second.size() - 1, 1);
+        }
+        ofs << elem.first << '\t' << elem.second << endl;
     }
     ofs.close();
 }
 
-void Cache::readFromFile() {
-    ifstream ifs(CONFIG["Cache"]);
+void Cache::readFromFile(const string& filepath) {
+    ifstream ifs(filepath);
     if (!ifs) {
         perror("fopen");
         return;
@@ -66,5 +85,7 @@ void Cache::readFromFile() {
     }
     ifs.close();
 }
+
+void Cache::clear() { _queryList.clear(); }
 
 }  // namespace wd

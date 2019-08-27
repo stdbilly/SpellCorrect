@@ -45,7 +45,7 @@ void EventLoop::waitEpollFd() {
     int nready;
     do {
         nready =
-            epoll_wait(_efd, &*_eventList.begin(), _eventList.size(), 5000);
+            epoll_wait(_efd, &*_eventList.begin(), _eventList.size(), 15000);
     } while (nready == -1 && errno == EINTR);
 
     if (nready == -1) {

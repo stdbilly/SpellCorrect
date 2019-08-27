@@ -1,5 +1,7 @@
 #include "MyTask.h"
 #include <unordered_map>
+#include "Cache.h"
+#include "CacheManager.h"
 #include "EditDistance.h"
 #include "MyDict.h"
 #include "json/json.h"
@@ -12,28 +14,36 @@ extern __thread int threadID;
 
 //运行在线程池的某一个子线程中
 void MyTask::process() {
-    cout << ">> workthread " << current_thread::threadID << ": MyTask::process()"
-         << endl;
-    queryIndexTable();
-    string result;
-    if (!_resultQue.empty()) {
-        Json::Value words;
-        Json::FastWriter writer;
-        int i = 0;
-        while ((i++ < 5) && !_resultQue.empty()) {
-            cout << ">> " << _resultQue.top()._word << " "
-                 << _resultQue.top()._distance << " "
-                 << _resultQue.top()._frequency << endl;
-            string key = "候选词" + std::to_string(i);
-            words[key] = _resultQue.top()._word;
-            _resultQue.pop();
+    Cache& threadCache =
+        CacheManager::getInstance()->getCache(current_thread::threadID);
+    string result = threadCache.get(_queryWord);
+    if (result == string()) {
+        cout << ">> workthread " << current_thread::threadID
+             << ": cache miss, query index table" << endl;
+        queryIndexTable();
+        if (!_resultQue.empty()) {
+            Json::Value words;
+            Json::FastWriter writer;
+            int i = 0;
+            while ((i++ < 5) && !_resultQue.empty()) {
+                cout << ">> " << _resultQue.top()._word << " "
+                     << _resultQue.top()._distance << " "
+                     << _resultQue.top()._frequency << endl;
+                string key = "候选词" + std::to_string(i);
+                words[key] = _resultQue.top()._word;
+                _resultQue.pop();
+            }
+            result = writer.write(words);
+        } else {
+            result = "no answer!";
         }
-        result = writer.write(words);
     } else {
-        result = "no answer!";
+        cout << ">> workthread " << current_thread::threadID << ": cache hit"
+             << endl;
     }
-
     _conn->sendInLoop(result);
+    
+    threadCache.update(_queryWord, result);
 }
 
 void MyTask::queryIndexTable() {
@@ -46,7 +56,7 @@ void MyTask::queryIndexTable() {
         idx += nBytes;
         auto it = indexTable.find(ch);
         if (it != indexTable.end()) {
-            cout << "index table has character " << ch << endl;
+            // cout << "index table has character " << ch << endl;
             for (auto& i : it->second) {
                 iset.insert(i);
             }

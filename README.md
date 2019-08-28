@@ -22,6 +22,7 @@
    下载[1.8.3版本](https://github.com/open-source-parsers/jsoncpp/archive/1.8.3.tar.gz)
 
    ```shell
+   tar xzvf jsoncpp-1.8.3.tar.gz
    cd jsoncpp-1.8.3/
    python amalgamate.py
    sudo cp include/json/ /usr/include/
